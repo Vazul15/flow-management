@@ -44,7 +44,7 @@ Developed by:
 
 ## Features
 
-## Technical Features
+### Technical Features
   - The application is containerized using Docker.
   - Docker Compose manages multi-container setups, including the PostgreSQL database.
   - Running with Docker Compose eliminates the need to manually create the database or configure environment variables locally.
@@ -53,19 +53,19 @@ Developed by:
   - Client-side routing with React Router for multiple pages.
   - Authorization: Secures endpoints to authenticated users.
     
-## UI/UX Features
+### UI/UX Features
   - Instant feedback with toast notifications.
   - Fully accessible components.
   - Consistent design system using shadcn/ui.
   - Loading states and animations.
 
-## Features for Admin
+### Features for Admin
   - Teacher Registration and Authentication: Built with Spring Security and JWT tokens for secure access control.
   - Teacher Invitation: Admins can invite teachers to sign up. The system sends an email with a randomly generated password for first-time login.
   - Role-Based Access Control: Differentiates between user and admin roles, ensuring functionality is tailored to user permissions.
   - Attendance Analytics and Tracking: Allows admins to monitor and analyze attendance data effectively.
 
-## Features for Teachers
+### Features for Teachers
   - Student Management: Teachers can add or remove students from their assigned groups.
   - Attendance Management: Enables teachers to manage student attendance records efficiently.
 
