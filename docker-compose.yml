@@ -1,0 +1,29 @@
+services:
+  db:
+    container_name: db
+    image: postgres:latest
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 40s
+      retries: 5
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3008:5173"

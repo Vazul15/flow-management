@@ -1,34 +1,40 @@
 package com.codecool.backend.controller;
 
-import com.codecool.backend.model.dto.request.attendance.AttendanceLocalDateDanceGroupNameRequestDTO;
-import com.codecool.backend.model.dto.response.attendance.AttendanceStudentResponseDTO;
-import com.codecool.backend.model.dto.response.attendance.AttendanceTeacherResponseDTO;
-import com.codecool.backend.service.AttendanceService;
+import com.codecool.backend.model.dto.request.studentAttendance.StudentAttendanceNewPresentRequestDTO;
+import com.codecool.backend.model.dto.response.attendance.StudentAttendancePublicIdFirstNameLastNameIsPresentResponseDTO;
+import com.codecool.backend.model.dto.response.attendance.StudentAttendancePublicIdIsPresent;
+import com.codecool.backend.service.attendance.StudentAttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/attendance")
 public class AttendanceController {
-    private final AttendanceService attendanceService;
+    private final StudentAttendanceService studentAttendanceService;
 
     @Autowired
-    public AttendanceController(AttendanceService attendanceService) {
-        this.attendanceService = attendanceService;
+    public AttendanceController(StudentAttendanceService studentAttendanceService) {
+        this.studentAttendanceService = studentAttendanceService;
     }
 
-    @GetMapping(path="/students")
-    public List<AttendanceStudentResponseDTO> getStudentsAttendanceByDate(@RequestBody AttendanceLocalDateDanceGroupNameRequestDTO studentsAttendance) {
-        return attendanceService.getAttendanceForStudentsByGroupAndDate(studentsAttendance);
+    @GetMapping(path = "")
+    public List<StudentAttendancePublicIdFirstNameLastNameIsPresentResponseDTO> getAttendanceStudents(@RequestParam String groupName,
+                                                                                                      @RequestParam String date,
+                                                                                                      @RequestParam String startTime,
+                                                                                                      @RequestParam String endTime) {
+        LocalDate parsedDate = LocalDate.parse(date);
+        LocalTime parsedStartTime = LocalTime.parse(startTime);
+        LocalTime parsedEndTime = LocalTime.parse(endTime);
+
+        return studentAttendanceService.getAttendanceForStudents(groupName, parsedDate, parsedStartTime, parsedEndTime);
     }
 
-    @GetMapping(path="/teacher")
-    public List<AttendanceTeacherResponseDTO> getTeachersAttendanceByDate(@RequestBody AttendanceLocalDateDanceGroupNameRequestDTO teacherAttendance) {
-        return attendanceService.getAttendanceForTeachersByGroupAndDate(teacherAttendance);
+    @PutMapping(path = "")
+    public StudentAttendancePublicIdIsPresent markStudentAttendance(@RequestBody StudentAttendanceNewPresentRequestDTO studentAttendance) {
+        return studentAttendanceService.markStudentAttendance(studentAttendance);
     }
 }

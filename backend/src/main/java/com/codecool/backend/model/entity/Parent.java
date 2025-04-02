@@ -20,10 +20,8 @@ public class Parent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     private String firstName;
 
-    @NotBlank
     private String lastName;
 
     @NotBlank
@@ -35,4 +33,9 @@ public class Parent {
 
     @OneToMany(mappedBy = "parent")
     private final Set<Student> students = new HashSet<>();
+
+    public Parent(String email, String phoneNumber) {
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
 }

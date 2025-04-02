@@ -3,41 +3,41 @@ package com.codecool.backend.model.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.ArrayList;
+
+import java.util.List;
+import java.util.UUID;
+
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @Column(unique = true, nullable = false)
+    private String publicId = UUID.randomUUID().toString();
+
     private String firstName;
 
-    @NotBlank
     private String lastName;
 
     @NotBlank
     @Email
     private String email;
 
-    @NotNull
     private LocalDate birthday;
 
-    @NotNull
     private String phoneNumber;
 
     private String password;
-
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -45,7 +45,7 @@ public class Teacher {
             joinColumns = @JoinColumn(name = "member_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinTable(
@@ -56,13 +56,14 @@ public class Teacher {
     private Location location;
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Attendance> attendances;
+    private List<TeacherAttendance> teacherAttendances;
 
     @ManyToMany(mappedBy = "teachers")
-    private Set<DanceGroup> danceGroups;
+    private List<Group> groups;
 
-    public Teacher(String email, String password) {
+    public Teacher(String email, String firstName, String password) {
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
     }
 }
